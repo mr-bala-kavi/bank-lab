@@ -3,7 +3,7 @@
 > **A hands-on penetration testing lab built with PHP & MySQL.**  
 > Designed for students and security learners to practice real-world web application attacks in a safe, controlled environment.
 
-![BankLab Screenshot](https://raw.githubusercontent.com/mr-bala-kavi/bank-lab/main/assets/preview.png)
+![BankLab Dashboard](assets/preview.png)
 
 ---
 
