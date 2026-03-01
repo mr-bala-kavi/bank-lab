@@ -1,0 +1,22 @@
+# Instructor-only files — NOT for public repo
+SOLUTIONS.md
+
+# Uploaded files (webshells, etc.)
+uploads/*
+!uploads/.gitkeep
+
+# Exports directory
+exports/*
+!exports/.gitkeep
+
+# OS & editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# PHP error logs
+*.log
+error_log
