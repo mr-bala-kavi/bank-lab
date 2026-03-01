@@ -9,13 +9,13 @@
 
 ## 📋 Table of Contents
 
-- [What is BankLab?](#what-is-banklab)
-- [Vulnerabilities Included](#vulnerabilities-included)
-- [Requirements](#requirements)
-- [Setup Guide](#setup-guide)
-- [Test Accounts](#test-accounts)
-- [Attack Surface](#attack-surface)
-- [Disclaimer](#disclaimer)
+- [What is BankLab?](#-what-is-banklab)
+- [Vulnerabilities Included](#-vulnerabilities-included)
+- [Requirements](#-requirements)
+- [Setup Guide](#-setup-guide)
+- [Test Accounts](#-test-accounts)
+- [Attack Surface](#-attack-surface)
+- [Disclaimer](#-disclaimer)
 
 ---
 
