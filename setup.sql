@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 -- Accounts table (sequential IDs - vulnerable to IDOR)
 CREATE TABLE IF NOT EXISTS accounts (
-    id INT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     account_number VARCHAR(20) NOT NULL,
     account_type VARCHAR(50) DEFAULT 'Savings',
